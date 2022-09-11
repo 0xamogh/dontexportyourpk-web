@@ -3,6 +3,7 @@ const form = document.querySelector("#submit");
 
 const metamaskCheck = checkIfMetamaskExists()
 let currentAccount, currentChainId
+if(metamaskCheck) connect()
 populateFormFromQuery()
 
 // formElements.elements[key].value = val
@@ -30,6 +31,7 @@ console.log("clicked submit")
     }
     if("0x" + parseInt(params.chainId,10).toString(16) != currentChainId){
         console.log("You are connected to the wrong network :", currentChainId)
+        requestChainSwitch("0x" + parseInt(params.chainId,10).toString(16))
         return
     }
 
@@ -70,6 +72,32 @@ async function connect(){
 
 }
 
+async function requestChainSwitch(chainId){
+ try {
+  await ethereum.request({
+    method: 'wallet_switchEthereumChain',
+    params: [{ chainId: chainId }],
+  });
+} catch (switchError) {
+  // This error code indicates that the chain has not been added to MetaMask.
+  if (switchError.code === 4902) {
+    try {
+      await ethereum.request({
+        method: 'wallet_addEthereumChain',
+        params: [
+          {
+            chainId: chainId,
+            chainName: '...',
+            rpcUrls: ['https://matic.slingshot.com'] /* ... */,
+          },
+        ],
+      });
+    } catch (addError) {
+      // handle "add" error
+    }
+  }
+}
+}
 function populateFormFromQuery(){
     const urlParams = new URLSearchParams(location.search)
     let formElements = document.getElementById("submit")
