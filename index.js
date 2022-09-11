@@ -24,13 +24,11 @@ console.log("clicked submit")
         await connect()
     }
 
-    console.log("🚀 ~ file: index.js ~ line 24 ~ sendTransaction ~ currentAccount", currentAccount)
     if(params.from != currentAccount){
         console.log("From address is not the same as connected address")
         return
     }
     if("0x" + parseInt(params.chainId,10).toString(16) != currentChainId){
-        console.log("🚀 ~ file: index.js ~ line 33 ~ sendTransaction ~ parseInt(params.chainId,10).toString(16)", parseInt(params.chainId,10).toString(16))
         console.log("You are connected to the wrong network :", currentChainId)
         return
     }
