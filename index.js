@@ -1,4 +1,4 @@
-console.log("hello world")
+consoleLog("hello world")
 const form = document.querySelector("#submit");
 
 const metamaskCheck = checkIfMetamaskExists()
@@ -6,10 +6,13 @@ let currentAccount, currentChainId
 if(metamaskCheck) connect()
 populateFormFromQuery()
 
-// formElements.elements[key].value = val
-// form.addEventListener('submit',(event) => {
+// console.log("does this still happen")
+// const cons = document.getElementById("consoleSpan")
+// const str = document.createTextNode("string")
+// cons.appendChild(str)
+
 async function sendTransaction(){ 
-console.log("clicked submit")
+consoleLog("clicked submit")
     // event.preventDefault()
     formElements = document.getElementById("submit")
  
@@ -26,11 +29,11 @@ console.log("clicked submit")
     }
 
     if(params.from != currentAccount){
-        console.log("From address is not the same as connected address")
+        consoleLog("From address is not the same as connected address")
         return
     }
     if("0x" + parseInt(params.chainId,10).toString(16) != currentChainId){
-        console.log("You are connected to the wrong network :", currentChainId)
+        consoleLog("You are connected to the wrong network :" + currentChainId)
         requestChainSwitch("0x" + parseInt(params.chainId,10).toString(16))
         return
     }
@@ -39,7 +42,7 @@ console.log("clicked submit")
       method: 'eth_sendTransaction',
       params: [params],
     })
-    .then((txHash) => console.log(txHash))
+    .then((txHash) => consoleLog(txHash))
     .catch((error) => console.error);
 }
 
@@ -54,7 +57,7 @@ function handleAccountsChanged(){
 
 async function connect(){
     if(currentAccount){
-        console.log(`Metamask is already connected with address : ${currentAccount}`)
+        consoleLog(`Metamask is already connected with address : ${currentAccount}`)
         return
     }
 
@@ -64,9 +67,9 @@ async function connect(){
     .catch((error) => {
       if (error.code === 4001) {
         // EIP-1193 userRejectedRequest error
-        console.log('Please connect to MetaMask.');
+        consoleLog('Please connect to MetaMask.');
       } else {
-        console.error("requreAccounts : ",error);
+        console.error("requireAccounts : ",error);
       }
     });
 
@@ -81,20 +84,7 @@ async function requestChainSwitch(chainId){
 } catch (switchError) {
   // This error code indicates that the chain has not been added to MetaMask.
   if (switchError.code === 4902) {
-    try {
-      await ethereum.request({
-        method: 'wallet_addEthereumChain',
-        params: [
-          {
-            chainId: chainId,
-            chainName: '...',
-            rpcUrls: ['https://matic.slingshot.com'] /* ... */,
-          },
-        ],
-      });
-    } catch (addError) {
-      // handle "add" error
-    }
+    consoleLog("Please add the chain to your rpc configuration")
   }
 }
 }
@@ -111,10 +101,17 @@ function checkIfMetamaskExists(){
     if (window.ethereum) {
         return true
     } else {
-        console.log("Please install Metamask!")
+        consoleLog("Please install Metamask!")
         return false
     }
+}
 
+
+function consoleLog(string){
+  console.log("does this still happen")
+  const cons = document.getElementById("consoleSpan")
+  const str = document.createTextNode(string)
+  cons.appendChild(str)
 }
 
 ethereum.on('connect', handler => {
