@@ -1,4 +1,3 @@
-consoleLog("hello world")
 const form = document.querySelector("#submit");
 
 const metamaskCheck = checkIfMetamaskExists()
@@ -6,13 +5,8 @@ let currentAccount, currentChainId
 if(metamaskCheck) connect()
 populateFormFromQuery()
 
-// console.log("does this still happen")
-// const cons = document.getElementById("consoleSpan")
-// const str = document.createTextNode("string")
-// cons.appendChild(str)
-
 async function sendTransaction(){ 
-consoleLog("clicked submit")
+consoleLog("Attempting to send transaction...")
     // event.preventDefault()
     formElements = document.getElementById("submit")
  
@@ -69,7 +63,7 @@ async function connect(){
         // EIP-1193 userRejectedRequest error
         consoleLog('Please connect to MetaMask.');
       } else {
-        console.error("requireAccounts : ",error);
+        consoleLog("requireAccounts : " + error);
       }
     });
 
@@ -108,10 +102,7 @@ function checkIfMetamaskExists(){
 
 
 function consoleLog(string){
-  console.log("does this still happen")
-  const cons = document.getElementById("consoleSpan")
-  const str = document.createTextNode(string)
-  cons.appendChild(str)
+  document.getElementById("consoleSpan").innerHTML = string
 }
 
 ethereum.on('connect', handler => {
